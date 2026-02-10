@@ -106,5 +106,8 @@ Responsibilities:
 ## 🔹 Architecture Summary (One-liner)
 
 > Designed an event-driven serverless architecture where text files uploaded to Amazon S3 automatically trigger an AWS Lambda function that uses Amazon Polly to generate MP3 audio files and stores them in a target S3 bucket.
+>
+> <img width="908" height="482" alt="image" src="https://github.com/user-attachments/assets/118ffc70-dd7d-408c-957e-332dce064b3e" />
+
 
 
