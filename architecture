@@ -1,0 +1,18 @@
+User
+   │
+   ▼
+S3 Source Bucket
+(text2talk-source-transcript-bucket)
+   │
+   ▼ (S3 Event Trigger)
+AWS Lambda (text2talk)
+   │
+   ▼
+Amazon Polly (Text → Speech)
+   │
+   ▼
+S3 Target Bucket
+(text2talk-target-audio-bucket)
+   │
+   ▼
+MP3 File Generated
