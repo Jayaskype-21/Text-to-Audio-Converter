@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Audio</title>
+</head>
+<body>
+
+<h2>Text to Audio Converter</h2>
+
+<textarea id="text" rows="5" cols="50"></textarea>
+<br><br>
+
+<button onclick="convert()">Convert</button>
+
+<br><br>
+
+<audio id="player" controls></audio>
+
+<script>
+
+async function convert() {
+
+    const text = document.getElementById("text").value;
+
+    const response = await fetch("https://mlnump60r8.execute-api.ap-south-1.amazonaws.com/convert", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text: text })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("player").src = data.audio_url;
+}
+
+</script>
+
+</body>
+</html>
