@@ -1,113 +1,216 @@
-# Text-to-Audio-Conveerter
-## Project Architecture
+ Serverless Text-to-Speech Web Application
 
-**Text-to-Speech Conversion using AWS Serverless Services**
+## 📌 Project Overview
 
-## 🔹 Architecture Overview
+This project is a fully serverless, cloud-native web application that converts user-provided text into speech (MP3 format) using AWS managed services.
 
-This project follows an **event-driven serverless architecture** using AWS managed services to automatically convert text files into speech (MP3 format).
-
-
-## 🔹 Architecture Flow (Step-by-Step)
-
-User / System
-   ↓
-S3 Source Bucket
-(text2talk-source-transcript-bucket)
-   ↓  (S3 Event Notification)
-AWS Lambda Function (text2talk)
-   ↓
-Amazon Polly (Text → Speech)
-   ↓
-S3 Target Bucket
-(text2talk-target-audio-bucket)
+The system is designed using an event-driven serverless architecture to ensure scalability, cost efficiency, and minimal infrastructure management.
 
 
-## 🔹 Component-wise Explanation
 
-### 1️⃣ Amazon S3 – Source Bucket
+# 🎯 Project Purpose
 
-**Bucket Name:** `text2talk-source-transcript-bucket`
+The main purpose of this project is to:
 
-* Stores input text transcript files (`.txt`)
-* Acts as the entry point of the workflow
-* Configured with **S3 Event Notifications**
+* Demonstrate serverless architecture using AWS
+* Build a real-world cloud-integrated web application
+* Implement API-driven backend communication
+* Convert text to speech using AI services
+* Showcase IAM-based secure service integration
 
----
-
-### 2️⃣ S3 Event Notification
-
-* Triggered on **ObjectCreated events**
-* Filters only `.txt` files
-* Automatically invokes the Lambda function
-
-✔️ Enables **automation without manual intervention**
-
----
-
-### 3️⃣ AWS Lambda – Processing Layer
-
-**Function Name:** `text2talk`
-**Runtime:** Python 3.11
-
-Responsibilities:
-
-* Reads the uploaded text file from the source S3 bucket
-* Extracts text content using `boto3`
-* Sends text data to **Amazon Polly**
-* Receives synthesized speech (MP3 format)
-* Uploads the generated audio file to the target S3 bucket
-
-✔️ Fully serverless
-✔️ No infrastructure management required
-
----
-
-### 4️⃣ Amazon Polly – Text-to-Speech Engine
-
-* Converts plain text into natural-sounding speech
-* Uses predefined voice IDs (e.g., *Salli*)
-* Returns audio stream in MP3 format
-
-✔️ Managed AI service
-✔️ Scalable and cost-efficient
-
----
-
-### 5️⃣ Amazon S3 – Target Bucket
-
-**Bucket Name:** `text2talk-target-audio-bucket`
-
-* Stores the generated MP3 audio files
-* Acts as the final output storage
-* Audio files can be accessed or downloaded as required
-
----
-
-### 6️⃣ IAM Role & Security
-
-* Lambda execution role with permissions:
-
-  * `AmazonS3FullAccess`
-  * `AmazonPollyReadOnlyAccess`
-* Ensures secure interaction between AWS services following **least privilege principle**
-
----
-
-## 🔹 Architecture Characteristics
-
-* **Event-Driven**
-* **Fully Serverless**
-* **Highly Scalable**
-* **Low Operational Overhead**
-* **Cost-Optimized (pay-per-use)**
+This project simulates how modern SaaS applications integrate frontend interfaces with scalable cloud backends.
 
 
-## 🔹 Architecture Summary (One-liner)
+# 🏗 Architecture Overview
 
-> Designed an event-driven serverless architecture where text files uploaded to Amazon S3 automatically trigger an AWS Lambda function that uses Amazon Polly to generate MP3 audio files and stores them in a target S3 bucket.
->
-> <img width="908" height="482" alt="image" src="https://github.com/user-attachments/assets/118ffc70-dd7d-408c-957e-332dce064b3e" />
+The application follows a layered serverless architecture:
+
+User (Browser)
+⬇
+Frontend (Hosted in Amplify)
+⬇
+API Gateway (HTTP Endpoint)
+⬇
+Lambda Function (Business Logic)
+⬇
+Amazon Polly (Text-to-Speech Engine)
+⬇
+Amazon S3 (Audio Storage)
+⬇
+Audio URL returned to frontend
+
+
+
+# 🔄 End-to-End Workflow
+
+### 1️⃣ User Interaction
+
+The user enters text in the web application and clicks **Convert**.
+
+### 2️⃣ API Request
+
+The frontend sends a **POST** request to the API Gateway endpoint:
+
+```json
+{
+  "text": "Hello World"
+}
+```
+
+### 3️⃣ API Gateway Routing
+
+API Gateway receives the request and forwards it to Lambda.
+
+### 4️⃣ Backend Processing
+
+Lambda:
+
+* Extracts the text
+* Calls Amazon Polly
+* Receives MP3 audio stream
+
+### 5️⃣ Storage
+
+Lambda uploads the generated MP3 file to S3.
+
+### 6️⃣ Response
+
+Lambda returns the S3 file URL.
+The frontend loads the URL into an HTML `<audio>` player.
+
+
+
+# ☁️ AWS Services Used and Why
+
+## 🔹 AWS Amplify
+
+Used for hosting and deploying the frontend.
+
+**Why?**
+
+* Easy frontend deployment
+* Integrated CI/CD
+* Automatic HTTPS
+* Global CDN distribution
+
+
+
+## 🔹 Amazon API Gateway
+
+Used to expose a secure HTTP endpoint.
+
+**Why?**
+
+* Manages REST/HTTP APIs
+* Handles routing
+* Manages CORS configuration
+* Connects frontend to backend securely
+
+
+
+## 🔹 AWS Lambda
+
+Used as the serverless backend compute service.
+
+**Why?**
+
+* No server management required
+* Auto-scaling
+* Pay-per-use pricing
+* Executes only when triggered
+
+
+
+## 🔹 Amazon Polly
+
+Used for converting text into speech.
+
+**Why?**
+
+* High-quality neural voices
+* Supports multiple languages
+* Direct MP3 output
+* Managed AI service
+
+
+
+## 🔹 Amazon S3
+
+Used to store generated MP3 files.
+
+**Why?**
+
+* Highly durable (11 9’s durability)
+* Scalable object storage
+* Secure access control
+* Cost-effective storage
+
+
+
+## 🔹 IAM (Identity and Access Management)
+
+Used to grant permissions between services.
+
+**Why?**
+
+* Secure service-to-service communication
+* Principle of Least Privilege
+* Prevents unauthorized access
+
+
+
+# 🏆 Advantages of This Project
+
+✅ Fully Serverless Architecture
+No infrastructure provisioning required.
+
+✅ Automatic Scaling
+Handles traffic spikes without manual scaling.
+
+✅ Cost Efficient
+Pay only for usage (Lambda execution + storage).
+
+✅ High Availability
+Uses AWS managed services with built-in redundancy.
+
+✅ Secure
+IAM-based access control and CORS protection.
+
+✅ Production-Ready Pattern
+Follows real-world SaaS architecture design.
+
+
+# 🔐 Security Implementation
+
+* IAM role attached to Lambda
+* Limited S3 write permissions
+* CORS configuration in API Gateway
+* Stateless backend processing
+
+
+# 📈 Scalability & Performance
+
+* Lambda auto-scales based on request load
+* API Gateway handles concurrent requests
+* S3 provides highly durable object storage
+* Polly processes requests on-demand
+
+No manual scaling required.
+
+
+# 💡 Technical Concepts Demonstrated
+
+* Serverless computing
+* REST API integration
+* Event-driven architecture
+* Cloud storage handling
+* AI service integration
+* IAM security model
+* CORS handling in web applications
+
+
+> <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/0ea5dfac-c347-46a9-bb68-3a8101ff1d2d" />
+
 
 
 
